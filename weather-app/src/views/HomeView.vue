@@ -8,9 +8,9 @@
       placeholder="Search for a city or location" 
       class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]"
       />
-      <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66]"
+      <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]"
       v-if="mapboxSearchResults">
-      <p v-if="searchError">
+      <p class="py-2" v-if="searchError">
         Sorry, something went sorry please try again or come back later.
       </p>
       <p v-if="!serverError && mapboxSearchResults.length === 0">
@@ -27,6 +27,14 @@
         </template>
       </ul>
     </div>
+    <div class="flex flex-col gap-4">
+      <Suspense>
+        <CityList />
+        <template #fallback>
+          <CityCardSkeleton />
+        </template>
+      </Suspense>
+    </div>
   </main>
 </template>
 
@@ -34,10 +42,11 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import CityCardSkeleton from '../components/CityCardSkeleton.vue';
+import CityList from '../components/CityList.vue';
 
 const router = useRouter();
 const previewCity = (searchResult) => {
-  console.log(searchResult);
   const [city, state] = searchResult.place_name.split(',');
   router.push({
     name: 'cityView',

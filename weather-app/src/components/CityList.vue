@@ -18,21 +18,25 @@ const getCities = async () => {
         savedCities.value = JSON.parse(
             localStorage.getItem("savedCities")
         );
+
         const requests = [];
         savedCities.value.forEach((city) => {
             requests.push(
                 axios.get(
-                    `https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lng}&appid=7efa332cf48aeb9d2d391a51027f1a71&units=metric`
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lng}&appid=0edd6a3b1604b4c6e65d9a5ca4ecea3d&units=metric`
                 )
             );
         });
+
         const weatherData = await Promise.all(requests);
+
         weatherData.forEach((value, index) => {
             savedCities.value[index].weather = value.data;
         });
     }
 };
 await getCities();
+
 const router = useRouter();
 const goToCityView = (city) => {
     router.push({
